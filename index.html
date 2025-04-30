@@ -13,57 +13,140 @@
 
     <!-- Babel para procesar JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Estilos CSS dentro del mismo archivo -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5DC;  
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; 
+        }
+
+        h1 {
+            color: #003366; 
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; 
+        }
+
+        input, button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%; 
+            text-align: center; 
+        }
+
+        input {
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #003366; 
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #00224d; 
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        
+        @media (max-width: 500px) {
+            .container {
+                width: 90%;
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <div class="container">
+        <h1>Comentarios</h1>
+
+        <script type="text/babel">
+            function CommentForm({ onAddComment }) {
+                const [comment, setComment] = React.useState("");
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    onAddComment(comment);
+                    setComment(""); 
+                };
+
+                return (
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            placeholder="Escribe un comentario"
+                        />
+                        <button type="submit">Enviar comentario</button>
+                    </form>
+                );
+            }
+
+            function App() {
+                const [comments, setComments] = React.useState([]);
+
+                const addComment = (newComment) => {
+                    setComments([...comments, newComment]);
+                };
+
+                return (
+                    <div>
+                        <CommentForm onAddComment={addComment} />
+                        <ul>
+                            {comments.map((comment, index) => (
+                                <li key={index}>{comment}</li>
+                            ))}
+                        </ul>
+                    </div>
+                );
+            }
+
+            const root = ReactDOM.createRoot(document.getElementById("root"));
+            root.render(<App />);
+        </script>
+    </div>
+
     <div id="root"></div>
-
-    <script type="text/babel">
-        function CommentForm({ onAddComment }) {
-            const [comment, setComment] = React.useState("");
-
-            const handleSubmit = (e) => {
-                e.preventDefault();
-                onAddComment(comment);
-                setComment(""); 
-            };
-
-            return (
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Escribe un comentario"
-                    />
-                    <button type="submit">Enviar comentario</button>
-                </form>
-            );
-        }
-
-        function App() {
-            const [comments, setComments] = React.useState([]);
-
-            const addComment = (newComment) => {
-                setComments([...comments, newComment]);
-            };
-
-            return (
-                <div>
-                    <h1>Comentarios</h1>
-                    <CommentForm onAddComment={addComment} />
-                    <ul>
-                        {comments.map((comment, index) => (
-                            <li key={index}>{comment}</li>
-                        ))}
-                    </ul>
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById("root"));
-        root.render(<App />);
-    </script>
 
 </body>
 </html>
